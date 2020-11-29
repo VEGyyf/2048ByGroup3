@@ -12,6 +12,11 @@
         <header>
             <h1>2048 Game</h1>
             <a href="javascript:newGame()" id="newGame">Re-Start</a>
+            <select id="rank">
+                <option value="1">EASY</option> 
+                <option value="2">NORMAL</option>
+                <option value="3">HARD</option>
+            </select>
             <p>score:<span id="score">0</span></p>
         </header>
 
@@ -39,6 +44,7 @@
 
     </div>
     <div class="leftbar">
+        
         <div class="player">
             <div class="images">q</div>
             <div class="username">userid1</div>
@@ -64,6 +70,10 @@
             
             <a href="javascript:login()" class="userbutton" id="login">LOG IN</a>
 
+        </div>
+
+        <div class="musicsetting">
+        <input type="checkbox" name="music" value="1">音乐
         </div>
 
         <div class="roombar">
