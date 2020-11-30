@@ -308,7 +308,8 @@ function moveLeft(){
                        board[i][k]=board[i][j]*2;
                        board[i][j]=0;
                        // update score
-                       score += board[i][k];
+                       var rank=$('#rank option:selected').val();
+                       score += board[i][k]*rank/2;
                        updateScore(score);
                        hasCollide[i][k] = true;
                        continue;
@@ -347,7 +348,8 @@ function moveRight(){
                         //    add
                         board[i][k]=board[i][j]*2;
                         board[i][j]=0;
-                        score += board[i][k];
+                        var rank=$('#rank option:selected').val();
+                        score += board[i][k]*rank/2;
                         updateScore(score);
                         hasCollide[i][k] = true;
                         continue;
@@ -386,6 +388,8 @@ function moveUp(){
                         board[k][j]=board[i][j]*2;
                         board[i][j]=0;
                         score += board[k][j];
+                        var rank=$('#rank option:selected').val();
+                        score += board[i][k]*rank/2;
                         updateScore(score);
                         hasCollide[k][j] = true;
                         continue;
@@ -421,7 +425,8 @@ function moveDown() {
                         //    add
                         board[k][j]=board[i][j]*2;
                         board[i][j]=0;
-                        score += board[k][j];
+                        var rank=$('#rank option:selected').val();
+                        score += board[i][k]*rank/2;
                         updateScore(score);
                         hasCollide[k][j] = true;
                         continue;
