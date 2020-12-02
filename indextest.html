@@ -12,7 +12,13 @@
         <header>
             <h1>2048 Game</h1>
             <a href="javascript:newGame()" id="newGame">Re-Start</a>
+            <select id="rank">
+                <option value="1">EASY</option> 
+                <option value="2">NORMAL</option>
+                <option value="3">HARD</option>
+            </select>
             <p>score:<span id="score">0</span></p>
+            
         </header>
 
         <div id="grid-container">
@@ -39,6 +45,7 @@
 
     </div>
     <div class="leftbar">
+        
         <div class="player">
             <div class="images">q</div>
             <div class="username">userid1</div>
@@ -66,6 +73,8 @@
 
         </div>
 
+        <audio src="http://music.163.com/song/media/outer/url?id=1314359433.mp3"  autoplay="true"  controls loop ></audio>
+
         <div class="roombar">
             <a class="roomline" href="javascript:joinRoom1()">Room 1&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span id="room1">0</span>/4</a>
             <a class="roomline">Room 2&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span id="room2">0</span>/4</a>
@@ -80,7 +89,7 @@
     <script src="scripts/support.js"></script>
     <script src="scripts/showAnimation.js"></script>
 
-
+    
     <script>
      
     </script>
