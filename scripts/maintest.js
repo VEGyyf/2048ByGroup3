@@ -1,35 +1,73 @@
 var board = [];
 var score = 0;
 var hasCollide = []; // 检测当前格是否已发生碰撞生成新的数
-var userid=Math.round(Math.random()*10000);
+var uid=Math.round(Math.random()*10000);
 var startx = 0;
 var starty = 0;
 var endx = 0;
 var endy = 0;
-
+var myid,myidinroom,myroomid;
+var canstart=0;//房间人齐了，可以开始游戏了，0就是不能开始
+var testtemmp;
 var isConnected = false; // websocket
 var ws;
 var flag1 = true;
 var flag2 = true;
 var userCnt;
+var strtemp;
+var formed_data={
+    "type":"client_to_server",
+    "userid":"null",//用户的id
+    "roomid":"null",//用户所在的房间号
+    "idinroom":"null",//用户在指定房间中的编号
+    "operation":"null",//发送board数组，申请开始游戏时发送null
+    "score":0//用户分数
 
+}
+var data_to_send=formed_data;
+data_to_send["userid"]=uid;
 ws = new WebSocket('ws://127.0.0.1:8001');
 ws.onopen = function(e){
-    ws.send("begin!"+userid);
+    let _str=JSON.stringify(data_to_send);
+    ws.send(_str);
     isConnected = true;
+
 }
 ws.onclose = function(e){
-    alert("服务器关闭");
+    alert("连接断开");
 }
 ws.onerror = function(){
     alert("连接出错");
 }
-ws.onmessage = function(e){
-    alert(e.data);
-    if(e.data[0]=='R'){
-        setCount(e.data);
-    }
+ws.onmessage = function(e){    //接收的消息,应该是同一房间内其他三个用户的board棋盘布局
+   if(JSON.parse(e.data)["roomid"]=="denied")
+   {
+    alert("目前不可进行游戏，请稍后再试！");
+    ws.close();
+   }
+   else if(JSON.parse(e.data)["type"]=="client_to_server")
+   {
+     data_to_send["roomid"]=JSON.parse(e.data)["roomid"];
+     data_to_send["idinroom"]=JSON.parse(e.data)["idinroom"];
+     myroomid=JSON.parse(e.data)["roomid"];
+     myidinroom=JSON.parse(e.data)["idinroom"];
+     //能不能让客户端先不能操作，然后等待可以操作的指令
+    //alert(JSON.stringify(formed_data));//test
+   } 
+   else if(JSON.parse(e.data)["type"]=="server_to_client")//收到更新消息
+   {
+    //根据接收到的json，把房间内四个玩家的棋盘都获取
+    testtemp=e.data;
+
+
+   }  
 }
+setInterval(function(){
+    data_to_send["operation"]=board;
+ ws.send(JSON.stringify(data_to_send));
+ console.log("success"); 
+}, 100);
+
 
 $(document).ready(function(){
     prepareForMobile();
@@ -81,6 +119,7 @@ function init(){
     updateBoardView();
     score = 0;
     updateScore(score);
+
 }
 
 // 根据数组渲染棋盘
@@ -124,6 +163,8 @@ function updateBoardView(){
             'border-radius': 0.02*cellSideLength
         })
     }
+       
+
 
 }
 
@@ -185,6 +226,9 @@ $(document).keydown(function(event){
         default:
             break;
     }
+    //每次按下按键都发送状态给服务器
+    data_to_send["operation"]=board;
+
 });
 
 var gridobj = document.getElementById('grid-container');
@@ -290,7 +334,7 @@ function moveLeft(){
     }
 
     setTimeout("updateBoardView()",200);
-ws.send(JSON.stringify(board));
+
     return true;
 }
 

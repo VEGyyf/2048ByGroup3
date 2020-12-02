@@ -14,7 +14,7 @@ body{
     top:0;
     bottom:0;
     text-align: center;
-    background-color: #a0adbb;
+    background-color: #f7dcf4;
 }
 
 header{
@@ -26,7 +26,6 @@ header{
 header h1{
     font-size: 45px;
     font-weight: bold;
-    color:#8f7a66
 }
 
 header #newGame{
@@ -44,11 +43,9 @@ header #newGame:hover{
     background-color: #9f8b77;
 }
 
-
 header p{
     font-size: 20px;
     margin: 10px auto;
-    color:#5a4d40;
 }
 
 #grid-container{
@@ -72,7 +69,7 @@ header p{
 .number-cell{
     position: absolute;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 60px;
     line-height: 100px;
     text-align: center;
     border-radius: 6px;
@@ -84,7 +81,7 @@ header p{
     width:20%;
     top:0;
     bottom:0;
-    background-color: #bba0ad;
+    background-color: #d3dbf3;
 }
 
 .player{
@@ -96,7 +93,7 @@ header p{
     height: 75%;
     width: 70%;
     margin: 10px;
-    background-color: #bbada0;
+    background-color: #76b5da;
 }
 
 /*room*/
@@ -107,14 +104,14 @@ header p{
     top:0;
     bottom:0;
     text-align: center;
-    background-color: #bba0ad;
+    background-color: #d3dbf3;
 }
 
 .userbar{
     float: top;
-    height: 25%;
+    height: 30%;
     text-align: center;
-    background-color: #bba0ad;
+    background-color: #679ebe;
 }
 
 .inputbar{
@@ -143,18 +140,10 @@ input{
     text-decoration: none;
 }
 
-.musicsetting{
-    float: top;
-    height: 10%;
-    text-align: center;
-    background-color: #bbada0;
-    ;
-}
-
 .roombar{
     float: top;
-    height: 75%;
-    background-color: #bba0ad;
+    height: 70%;
+    background-color: #d3dbf3;
 }
 
 .roomline{
