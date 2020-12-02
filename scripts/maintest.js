@@ -92,12 +92,29 @@ function prepareForMobile(){
 }
 
 function newGame(){
-//   初始化棋盘
-    init();
-//    随机生成数字
-    generateOneNumber();
-    generateOneNumber();
-}
+    //   初始化棋盘
+        init();
+    //    随机生成数字
+        var randx; 
+        var randy; 
+        for(var i=0;i<2;i++){
+            randx= parseInt(Math.floor(Math.random() * 4));
+            randy= parseInt(Math.floor(Math.random() * 4));
+            while(true){
+                if(board[randx][randy] == 0)
+                    break;
+                randx = parseInt(Math.floor(Math.random() * 4));
+                randy = parseInt(Math.floor(Math.random() * 4));
+            }
+    
+            //随机一个数字
+            var randNumber = Math.random() < 0.5?2:4;
+    
+            //在随机的位置显示随机数字
+            board[randx][randy]=randNumber;
+            showNumberWithAnimation(randx,randy,randNumber);
+        }
+    }
 
 function init(){
     for(var i=0;i<4;i++){
@@ -168,28 +185,41 @@ function updateBoardView(){
 
 }
 
-function generateOneNumber(){
-    if(nospace(board))
-        return false;
-
+function generateOneNumber(){//根据难度选择分别生成1，2，3个
+    //if(nospace(board))
+    //   return false;
+    var flag=true;
+    var rank=$('#rank option:selected').val();
     //随机一个位置
-    var randx = parseInt(Math.floor(Math.random() * 4));
-    var randy = parseInt(Math.floor(Math.random() * 4));
-    while(true){
-        if(board[randx][randy] == 0)
+    var randx; 
+    var randy; 
+    for(var i=0;i<rank;i++){
+        randx= parseInt(Math.floor(Math.random() * 4));
+        randy= parseInt(Math.floor(Math.random() * 4));
+        while(true){//死循环
+            if(board[randx][randy] == 0)
+                break;
+            if(nospace(board))
+            {
+                flag=false;
+                break;
+            }
+            randx = parseInt(Math.floor(Math.random() * 4));
+            randy = parseInt(Math.floor(Math.random() * 4));
+        }
+        if(flag){
+            //随机一个数字
+            var randNumber = Math.random() < 0.5?2:4;
+
+            //在随机的位置显示随机数字
+            board[randx][randy]=randNumber;
+            showNumberWithAnimation(randx,randy,randNumber);
+        }
+        else{
             break;
-        randx = parseInt(Math.floor(Math.random() * 4));
-        randy = parseInt(Math.floor(Math.random() * 4));
+        }
     }
-
-    //随机一个数字
-    var randNumber = Math.random() < 0.5?2:4;
-
-    //在随机的位置显示随机数字
-    board[randx][randy]=randNumber;
-    showNumberWithAnimation(randx,randy,randNumber);
-
-    return true;
+    return flag;
 }
 
 $(document).keydown(function(event){
@@ -480,3 +510,33 @@ function joinRoom1()
     var tmp=1;
     ws.send("J"+tmp.toString()+userCnt);
 }
+
+function joinRoom2()
+{
+    var tmp=2;
+    ws.send("J"+tmp.toString()+userCnt);
+}
+function joinRoom3()
+{
+    var tmp=3;
+    ws.send("J"+tmp.toString()+userCnt);
+}
+
+function joinRoom4()
+{
+    var tmp=4;
+    ws.send("J"+tmp.toString()+userCnt);
+}
+
+function joinRoom5()
+{
+    var tmp=5;
+    ws.send("J"+tmp.toString()+userCnt);
+}
+
+function joinRoom6()
+{
+    var tmp=1;
+    ws.send("J"+tmp.toString()+userCnt);
+}
+
