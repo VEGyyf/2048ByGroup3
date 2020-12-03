@@ -89,11 +89,11 @@ ws.onmessage = function(e){    //接收的消息,应该是同一房间内其他�
         {
             if(k!=0){//其他1，2，3号，当前房内id为0
                 updateMiniBoardView(server_massage["board"],k);
-                $("#username"+k).val("user"+k+' score:'+server_massage["score"]);
+                //$("#username"+k).val("user"+k+' score:'+server_massage["score"]);
             }
             else{
                 updateMiniBoardView(server_massage["board"],ownidinroom);//将0号放到自己房间对应的号码上
-                $("#username"+k).val("user"+k+' score:'+server_massage["score"]);
+                //$("#username"+k).val("user"+k+' score:'+server_massage["score"]);
             }
         }
         
