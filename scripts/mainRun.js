@@ -6,6 +6,8 @@ var starty = 0;
 var endx = 0;
 var endy = 0;
 
+var ownidinroom = 0;//当前用户在房间内id
+
 var ws; //socket
 var isConnected = false;// websocket是否连接
 var isLogged =false;// 是否登录
@@ -61,14 +63,41 @@ ws.onmessage = function(e){    //接收的消息,应该是同一房间内其他�
             if(server_massage["roomid"]==1){ //roomid 1->二号房间
                 $("#room2").text(server_massage["roomnum"]);
             }
+            if(server_massage["roomid"]==2){ //roomid 2 ->三号房间
+                $("#room3").text(server_massage["roomnum"]);
+            }
+            if(server_massage["roomid"]==3){ //roomid 3->四号房间
+                $("#room4").text(server_massage["roomnum"]);
+            }
+            if(server_massage["roomid"]==4){ //roomid 4 ->五号房间
+                $("#room5").text(server_massage["roomnum"]);
+            }
+            if(server_massage["roomid"]==5){ //roomid 5->六号房间
+                $("#room6").text(server_massage["roomnum"]);
+            }
         }
     }
     if(server_massage["state"]=="READY"){
         send_data["user_roomid"]=server_massage["user_roomid"];
+        ownidinroom=server_massage["user_roomid"];
         newGame(); //重置游戏并开始
         alert("开始游戏!");
     }
-  
+    if(server_massage["state"]=="RRUN"){
+        var k=server_massage["user_roomid"];//0,1,2,3
+        if(k!=ownidinroom)//其他棋盘状态
+        {
+            if(k!=0){//其他1，2，3号，当前房内id为0
+                updateMiniBoardView(server_massage["board"],k);
+                $("#username"+k).val("user"+k+' score:'+server_massage["score"]);
+            }
+            else{
+                updateMiniBoardView(server_massage["board"],ownidinroom);//将0号放到自己房间对应的号码上
+                $("#username"+k).val("user"+k+' score:'+server_massage["score"]);
+            }
+        }
+        
+    }
 }
 
 $(document).ready(function(){
@@ -94,12 +123,29 @@ function prepareForMobile(){
 }
 
 function newGame(){
-//   初始化棋盘
-    init();
-//    随机生成数字
-    generateOneNumber();
-    generateOneNumber();
-}
+    //   初始化棋盘
+        init();
+    //    随机生成数字
+        var randx; 
+        var randy; 
+        for(var i=0;i<2;i++){
+            randx= parseInt(Math.floor(Math.random() * 4));
+            randy= parseInt(Math.floor(Math.random() * 4));
+            while(true){
+                if(board[randx][randy] == 0)
+                    break;
+                randx = parseInt(Math.floor(Math.random() * 4));
+                randy = parseInt(Math.floor(Math.random() * 4));
+            }
+    
+            //随机一个数字
+            var randNumber = Math.random() < 0.5?2:4;
+    
+            //在随机的位置显示随机数字
+            board[randx][randy]=randNumber;
+            showNumberWithAnimation(randx,randy,randNumber);
+        }
+    }
 
 function init(){
     for(var i=0;i<4;i++){
@@ -109,7 +155,15 @@ function init(){
             cell.css('left',getLeft(i,j));
         }
     }
-
+    for(var k=1;k<4;k++){
+        for(var i=0;i<4;i++){
+            for(var j=0;j<4;j++){
+                var minicell = $('#mini-grid-cell-'+k+'-'+i+'-'+j);
+                minicell.css('top',getMiniTop(i,j));
+                minicell.css('left',getMiniLeft(i,j));
+            }
+        }
+    }
     for(var i=0;i<4;i++){
         board[i]=new Array();
         hasCollide[i] = new Array();
@@ -121,7 +175,19 @@ function init(){
     updateBoardView();
     score = 0;
     updateScore(score);
-
+    //缩略图
+    var initmini=[];
+    for(var i=0;i<4;i++){
+        initmini[i]=new Array();
+        //hasCollide[i] = new Array();
+        for(var j=0;j<4;j++){
+            initmini[i][j]=0;
+            //hasCollide[i][j] = false;
+        }
+    }
+    for(var i=1;i<4;i++){
+        updateMiniBoardView(initmini,i);
+    }
 }
 
 // 根据数组渲染棋盘
@@ -167,30 +233,96 @@ function updateBoardView(){
     }
 
 }
+// 渲染缩略图
+function updateMiniBoardView(mini,k){
+    for(let i=0;i<4;i++)
+    {
+        for(let j=0;j<4;j++)
+        {
+            $("#mini-number-cell"+'-'+k+'-'+i+'-'+j).remove();
+            //$(".mini-number-cell").remove();
+        }
+    }
+    
+    for(var i=0;i<4;i++)
+    {
+        for(var j=0;j<4;j++){
+            $("#image"+k).append('<div class="mini-number-cell" id="mini-number-cell-'+k+'-'+i+'-'+j+'"></div>');
+            //else if(k==2){$("#image2").append('<div class="mini-number-cell" id="mini-number-cell-'+k+'-'+i+'-'+j+'"></div>');}
+            //else if(k==3){$("#image3").append('<div class="mini-number-cell" id="mini-number-cell-'+k+'-'+i+'-'+j+'"></div>');}
 
-function generateOneNumber(){
-    if(nospace(board))
-        return false;
+            var mininumberCell = $('#mini-number-cell-'+k+'-'+i+'-'+j);
 
-    //随机一个位置
-    var randx = parseInt(Math.floor(Math.random() * 4));
-    var randy = parseInt(Math.floor(Math.random() * 4));
-    while(true){
-        if(board[randx][randy] == 0)
-            break;
-        randx = parseInt(Math.floor(Math.random() * 4));
-        randy = parseInt(Math.floor(Math.random() * 4));
+            if(mini[i][j] == 0){
+                mininumberCell.css({
+                    'width':'0px',
+                    'height':'0px',
+                    'left': getMiniLeft(i,j)+0.5*minicellSideLength,
+                    'top': getMiniTop(i,j)+0.5*minicellSideLength
+                })
+            }
+            else{
+                mininumberCell.css({
+                    'width': minicellSideLength,
+                    'height': minicellSideLength,
+                    'left': getMiniLeft(i,j),
+                    'top': getMiniTop(i,j),
+                    'background-color': getNumberBackgroundColor(mini[i][j]),
+                    'color': getNumberColor(mini[i][j])
+                }).text(mini[i][j]);
+            }
+
+            //hasCollide[i][j] = false;
+        }
     }
 
-    //随机一个数字
-    var randNumber = Math.random() < 0.5?2:4;
+    if(documentWidth<768){
+        $(".mini-number-cell").css({
 
-    //在随机的位置显示随机数字
-    board[randx][randy]=randNumber;
-    showNumberWithAnimation(randx,randy,randNumber);
-
-    return true;
+            'font-size': 0.6*minicellSideLength+'px',
+            'line-height': minicellSideLength+'px',
+            'border-radius': 0.02*minicellSideLength
+        })
+    }
 }
+
+function generateOneNumber(){//根据难度选择分别生成1，2，3个
+    //if(nospace(board))
+    //   return false;
+    var flag=true;
+    var rank=$('#rank option:selected').val();
+    //随机一个位置
+    var randx; 
+    var randy; 
+    for(var i=0;i<rank;i++){
+        randx= parseInt(Math.floor(Math.random() * 4));
+        randy= parseInt(Math.floor(Math.random() * 4));
+        while(true){//死循环
+            if(board[randx][randy] == 0)
+                break;
+            if(nospace(board))
+            {
+                flag=false;
+                break;
+            }
+            randx = parseInt(Math.floor(Math.random() * 4));
+            randy = parseInt(Math.floor(Math.random() * 4));
+        }
+        if(flag){
+            //随机一个数字
+            var randNumber = Math.random() < 0.5?2:4;
+
+            //在随机的位置显示随机数字
+            board[randx][randy]=randNumber;
+            showNumberWithAnimation(randx,randy,randNumber);
+        }
+        else{
+            break;
+        }
+    }
+    return flag;
+}
+
 
 $(document).keydown(function(event){
 
