@@ -505,13 +505,13 @@ function joinRoom2()
     ws.send(JSON.stringify(send_data));
 }
 
-function joinRoom()
+function joinRoom(x)
 {
     if(isLogged==false){
         alert("未登录!");
         return;
     }
     send_data["state"]="JOI";
-    send_data["roomid"]=0;
+    send_data["roomid"]=x;
     ws.send(JSON.stringify(send_data));
 }
