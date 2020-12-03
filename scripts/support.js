@@ -6,6 +6,9 @@ gridContainerWidth = documentWidth<768?0.92*documentWidth:500;
 cellSideLength = documentWidth<768?0.18*documentWidth:100;
 cellSpace = documentWidth<768?0.04*documentWidth:20;
 
+minicellSideLength = documentWidth<768?0.18*documentWidth:40;
+minicellSpace= documentWidth<768?0.04*documentWidth:10;
+
 function getTop(i,j){
 
     return cellSpace+i*(cellSideLength+cellSpace);
@@ -14,6 +17,17 @@ function getTop(i,j){
 function getLeft(i,j){
 
     return cellSpace+j*(cellSpace+cellSideLength);
+
+}
+
+function getMiniTop(i,j){
+
+    return minicellSpace+i*(minicellSideLength+minicellSpace);
+}
+
+function getMiniLeft(i,j){
+
+    return minicellSpace+j*(minicellSpace+minicellSideLength);
 
 }
 

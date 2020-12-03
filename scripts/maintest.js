@@ -58,7 +58,11 @@ ws.onmessage = function(e){    //接收的消息,应该是同一房间内其他�
    {
     //根据接收到的json，把房间内四个玩家的棋盘都获取
     testtemp=e.data;
-
+    if(myroomid ==JSON.parse(e.data)["roomid"] ){//针对本房间的情报
+        //TODO:轮询三个窗口，若userid对应，则渲染对应窗口，若都无，则选择一个空闲的窗口渲染
+        mini=JSON.parse(e.data)["operation"];
+        updateMiniBoardView(mini,k);//
+    }
 
    }  
 }
@@ -124,7 +128,15 @@ function init(){
             cell.css('left',getLeft(i,j));
         }
     }
-
+    for(var k=1;k<4;k++){
+        for(var i=0;i<4;i++){
+            for(var j=0;j<4;j++){
+                var minicell = $('#mini-grid-cell-'+k+'-'+i+'-'+j);
+                minicell.css('top',getMiniTop(i,j));
+                minicell.css('left',getMiniLeft(i,j));
+            }
+        }
+    }
     for(var i=0;i<4;i++){
         board[i]=new Array();
         hasCollide[i] = new Array();
@@ -136,7 +148,19 @@ function init(){
     updateBoardView();
     score = 0;
     updateScore(score);
-
+    //缩略图
+    var initmini=[];
+    for(var i=0;i<4;i++){
+        initmini[i]=new Array();
+        //hasCollide[i] = new Array();
+        for(var j=0;j<4;j++){
+            initmini[i][j]=0;
+            //hasCollide[i][j] = false;
+        }
+    }
+    for(var i=1;i<4;i++){
+        updateMiniBoardView(initmini,i);
+    }
 }
 
 // 根据数组渲染棋盘
@@ -184,6 +208,49 @@ function updateBoardView(){
 
 
 }
+// 渲染缩略图
+function updateMiniBoardView(mini,k){
+
+    $(".mini-number-cell").remove();
+    for(var i=0;i<4;i++)
+    {
+        for(var j=0;j<4;j++){
+            $("#images"+'k').append('<div class="mini-number-cell" id="mini-number-cell-'+k+'-'+i+'-'+j+'"></div>');
+            var mininumberCell = $('#mini-number-cell-'+k+'-'+i+'-'+j);
+
+            if(mini[i][j] == 0){
+                mininumberCell.css({
+                    'width':'0px',
+                    'height':'0px',
+                    'left': getLeft(i,j)+0.5*cellSideLength,
+                    'top': getTop(i,j)+0.5*cellSideLength
+                })
+            }
+            else{
+                mininumberCell.css({
+                    'width': cellSideLength,
+                    'height': cellSideLength,
+                    'left': getLeft(i,j),
+                    'top': getTop(i,j),
+                    'background-color': getNumberBackgroundColor(mini[i][j]),
+                    'color': getNumberColor(mini[i][j])
+                }).text(mini[i][j]);
+            }
+
+            //hasCollide[i][j] = false;
+        }
+    }
+
+    if(documentWidth<768){
+        $(".mini-number-cell").css({
+
+            'font-size': 0.6*cellSideLength+'px',
+            'line-height': cellSideLength+'px',
+            'border-radius': 0.02*cellSideLength
+        })
+    }
+}
+
 
 function generateOneNumber(){//根据难度选择分别生成1，2，3个
     //if(nospace(board))
@@ -505,38 +572,9 @@ function setCount(str)
     alert(userCnt);
 }
 
-function joinRoom1()
+function joinRoom(x)
 {
-    var tmp=1;
-    ws.send("J"+tmp.toString()+userCnt);
-}
-
-function joinRoom2()
-{
-    var tmp=2;
-    ws.send("J"+tmp.toString()+userCnt);
-}
-function joinRoom3()
-{
-    var tmp=3;
-    ws.send("J"+tmp.toString()+userCnt);
-}
-
-function joinRoom4()
-{
-    var tmp=4;
-    ws.send("J"+tmp.toString()+userCnt);
-}
-
-function joinRoom5()
-{
-    var tmp=5;
-    ws.send("J"+tmp.toString()+userCnt);
-}
-
-function joinRoom6()
-{
-    var tmp=1;
-    ws.send("J"+tmp.toString()+userCnt);
+    //var tmp=1;
+    ws.send("J"+x.toString()+userCnt);
 }
 

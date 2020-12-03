@@ -89,16 +89,37 @@ header p{
 
 .player{
     float: top;
-    height: 31%;
+    height: 33%;
 }
 
 .images{
-    height: 75%;
-    width: 70%;
+
+    padding: 6px;
+    position: relative;
+
+
+    height: 200px;
+    width: 200px;
     margin: 10px;
+    border-radius: 10px;
     background-color: #bbada0;
 }
+.mini-grid-cell{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #ccc0b3;
+    border-radius: 6px;
+}
 
+.mini-number-cell{
+    position: absolute;
+    font-weight: bold;
+    font-size: 40%;
+    line-height: 100%;
+    text-align: center;
+    border-radius: 6px;
+}
 /*room*/
 .rightbar{
     position: fixed;
@@ -170,4 +191,12 @@ input{
 
 .roomline:hover{
     background-color: #9f8b77;
+}
+
+.roomline:active{
+    background-color: #f5d7ba;
+}
+
+.roomline:visited{
+    background-color: #0a0a0a;
 }
