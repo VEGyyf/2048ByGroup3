@@ -14,7 +14,7 @@ body{
     top:0;
     bottom:0;
     text-align: center;
-    background-color: #f7dcf4;
+    background-color: #a0adbb;
 }
 
 header{
@@ -26,6 +26,7 @@ header{
 header h1{
     font-size: 45px;
     font-weight: bold;
+    color:#8f7a66
 }
 
 header #newGame{
@@ -43,9 +44,11 @@ header #newGame:hover{
     background-color: #9f8b77;
 }
 
+
 header p{
     font-size: 20px;
     margin: 10px auto;
+    color:#5a4d40;
 }
 
 #grid-container{
@@ -69,7 +72,7 @@ header p{
 .number-cell{
     position: absolute;
     font-weight: bold;
-    font-size: 60px;
+    font-size: 40px;
     line-height: 100px;
     text-align: center;
     border-radius: 6px;
@@ -81,21 +84,42 @@ header p{
     width:20%;
     top:0;
     bottom:0;
-    background-color: #d3dbf3;
+    background-color: #bba0ad;
 }
 
 .player{
     float: top;
-    height: 31%;
+    height: 33%;
 }
 
 .images{
-    height: 75%;
-    width: 70%;
+
+    padding: 6px;
+    position: relative;
+
+
+    height: 200px;
+    width: 200px;
     margin: 10px;
-    background-color: #76b5da;
+    border-radius: 10px;
+    background-color: #bbada0;
+}
+.mini-grid-cell{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #ccc0b3;
+    border-radius: 6px;
 }
 
+.mini-number-cell{
+    position: absolute;
+    font-weight: bold;
+    font-size: 40%;
+    line-height: 100%;
+    text-align: center;
+    border-radius: 6px;
+}
 /*room*/
 .rightbar{
     position: fixed;
@@ -104,14 +128,14 @@ header p{
     top:0;
     bottom:0;
     text-align: center;
-    background-color: #d3dbf3;
+    background-color: #bba0ad;
 }
 
 .userbar{
     float: top;
-    height: 30%;
+    height: 25%;
     text-align: center;
-    background-color: #679ebe;
+    background-color: #bba0ad;
 }
 
 .inputbar{
@@ -140,10 +164,18 @@ input{
     text-decoration: none;
 }
 
+.musicsetting{
+    float: top;
+    height: 10%;
+    text-align: center;
+    background-color: #bbada0;
+    ;
+}
+
 .roombar{
     float: top;
-    height: 70%;
-    background-color: #d3dbf3;
+    height: 75%;
+    background-color: #bba0ad;
 }
 
 .roomline{
@@ -161,3 +193,10 @@ input{
     background-color: #9f8b77;
 }
 
+.roomline:active{
+    background-color: #f5d7ba;
+}
+
+.roomline:visited{
+    background-color: #0a0a0a;
+}
